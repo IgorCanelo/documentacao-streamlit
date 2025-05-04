@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 
-df_login_agg_date = pd.read_csv(r"tables\login_agg_date.csv", sep=",", index_col=0)
+df_login_agg_date = pd.read_csv("tables/login_agg_date.csv", sep=",", index_col=0)
 df_first_time_login = pd.read_csv(
-    r"tables/first_time_login.csv",
+    "tables/first_time_login.csv",
     sep=",",
     index_col=0,
     keep_default_na=False,
