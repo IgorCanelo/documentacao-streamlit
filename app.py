@@ -235,7 +235,7 @@ elif st.session_state.page == "🖥️ Local Environment":
     st.markdown("""
     ### 📄 1. Clone the Repository
     ```git
-    git clone https://github.com/IgorCanelo/ETL.git
+    git clone https://github.com/IgorCanelo/game_data_pipeline.git
     ```      
 
     ### 🔐 2. `.env` Configuration
