@@ -24,11 +24,12 @@ def change_page(page_name):
 
 
 # Sidebar
-st.sidebar.title("Navegação")
-nav = st.sidebar.radio("Ir para:", ["📌 Overview", "☁️ Ambiente na Nuvem", "🖥️ Ambiente Local", 
-                                    "🏗️ Arquitetura de Dados"],
-                                    index=["📌 Overview", "☁️ Ambiente na Nuvem", "🖥️ Ambiente Local", 
-                                    "🏗️ Arquitetura de Dados"].index(st.session_state.page))
+st.sidebar.title("Navigation")
+nav = st.sidebar.radio("Go to:", ["📌 Overview", "☁️ Cloud Environment", "🖥️ Local Environment", 
+                                  "🏗️ Data Architecture"],
+                                  index=["📌 Overview", "☁️ Cloud Environment", "🖥️ Local Environment", 
+                                  "🏗️ Data Architecture"].index(st.session_state.page))
+
 
 # Atualiza a página ativa com base no radio button
 if nav != st.session_state.page:
@@ -39,57 +40,55 @@ if nav != st.session_state.page:
 if st.session_state.page == "📌 Overview":
 
 
-    st.title("📌 Visão Geral do Projeto de Pipeline de Dados")
+    st.title("📌 Overview")
 
     st.markdown("""
-    Este projeto implementa um pipeline completo para a simulação e análise de logins de usuários em um jogo. Para testar sua execução, siga os passos de configuração do ambiente local e cloud, descritos nas próximas seções.
+    This project implements a complete pipeline for simulating and analyzing user logins in a game. To test its execution, follow the setup steps for the local and cloud environments described in the following sections.
 
-    Após a conclusão do setup, a DAG estará pronta para ser executada. Em um cenário de produção, as DAGs devem ser agendadas para execução diária, garantindo que os dados estejam sempre atualizados.
+    After completing the setup, the DAG will be ready to run. In a production scenario, DAGs should be scheduled for daily execution, ensuring that the data is always up to date.
 
-    A execução do pipeline se inicia manualmente através da DAG `dag_data_creation`. A DAG `dag_data_transformation` foi desenvolvida para iniciar automaticamente ao término da primeira.
+    The pipeline execution starts manually through the `dag_data_creation` DAG. The `dag_data_transformation` DAG was developed to start automatically after the first one finishes.
 
-    O projeto foi estruturado visando máxima automação e tolerância a falhas. Para isso, foram implementadas notificações no Slack em casos de sucesso ou falha, enviadas para um canal específico de logs. Essa abordagem proporciona visibilidade operacional em ambientes com múltiplas DAGs, permitindo respostas rápidas e eficazes diante de falhas.
+    The project was structured to ensure maximum automation and fault tolerance. For this, Slack notifications were implemented for both success and failure cases, sent to a specific logs channel. This approach provides operational visibility in environments with multiple DAGs, allowing for quick and effective responses to failures.
 
-    Visualização das notificações:
+    Notification preview:
     """)
 
-    st.image("images/logs_slack.png", caption="Notificações via Slack - Airflow", use_container_width=True)
-
-    st.markdown("---")
-
-
-    st.markdown("""
-    ### 🎯 Objetivo
-    O principal objetivo do projeto foi disponibilizar tabelas analíticas que possam ser consumidas por analistas para gerar insights relevantes que apoiem a tomada de decisões.
-
-    A arquitetura foi projetada para ser escalável, considerando o crescimento contínuo da base de usuários e volume de dados. Por isso, optou-se pelo uso de tecnologias como PySpark e SparkSQL, que permitem processar grandes volumes de dados de forma eficiente.
-    """)
+    st.image("images/logs_slack.png", caption="Slack Notifications - Airflow", use_container_width=True)
 
     st.markdown("---")
 
     st.markdown("""
-    ### 🧾 Tabelas Finais Geradas
+    ### 🎯 Objective
+    The main objective of the project was to provide analytical tables that can be used by analysts to generate relevant insights that support decision-making.
+
+    The architecture was designed to be scalable, considering the continuous growth of the user base and data volume. Therefore, technologies such as PySpark and SparkSQL were chosen, as they allow efficient processing of large datasets.
+    """)
+
+    st.markdown("---")
+
+    st.markdown("""
+    ### 🧾 Final Tables Generated
 
     - **`login_agg_date`**  
-      Tabela agregada por data. Como os registros originais de login são baseados em timestamp, foi realizada uma agregação por data, contabilizando o número de logins por usuário a cada dia. Também foram incluídas as informações de continente, país e sistema operacional utilizados.
-
+      Table aggregated by date. Since the original login records are timestamp-based, a daily aggregation was performed, counting the number of logins per user each day. It also includes information about the continent, country, and operating system used.
     """)
     st.dataframe(df_login_agg_date)
 
     st.markdown("""
     - **`first_time_login`**  
-      Esta tabela apresenta uma agregação por `user_id`, contendo a quantidade total de logins realizados por cada usuário, bem como a data e o horário do primeiro login registrado. Além disso, inclui as informações de continente, país e sistema operacional.
-
+      This table presents an aggregation by `user_id`, containing the total number of logins performed by each user, as well as the date and time of their first recorded login. Additionally, it includes information on continent, country, and operating system.
     """)
     st.dataframe(df_first_time_login)
 
     st.markdown("""
-    Reforçando: em um ambiente de produção, é essencial que as DAGs sejam executadas diariamente, garantindo a atualização contínua das tabelas analíticas.
+    Just to reinforce: in a production environment, it is essential that DAGs run daily to ensure continuous updates of the analytical tables.
     """)
 
     st.markdown("---")
 
-    st.subheader("📁 Estrutura de Pastas do Projeto")
+    st.subheader("📁 Project Folder Structure")
+
 
     st.code('''
     ├── data_pipeline_project/
@@ -126,119 +125,122 @@ if st.session_state.page == "📌 Overview":
     ''')
 
     st.markdown("---")
-    st.subheader("✅ Pronto para iniciar?")
-    if st.button("☁️ Configurar Ambiente na Nuvem"):
-        change_page("☁️ Ambiente na Nuvem")
+    st.subheader("✅ Ready to get started?")
+    if st.button("☁️ Set Up Cloud Environment"):
+        change_page("☁️ Cloud Environment")
         st.rerun()
 
-# Página: Ambiente na Nuvem
-elif st.session_state.page == "☁️ Ambiente na Nuvem":
-    st.title("☁️ Setup: Ambiente na Nuvem (AWS)")
+# Page: Cloud Environment
+elif st.session_state.page == "☁️ Cloud Environment":
+    st.title("☁️ Setup: Cloud Environment (AWS)")
+
 
     st.markdown("""
-## ✍️ Introdução
+    ## ✍️ Introduction
 
-Este documento apresenta os passos necessários para configurar e executar o projeto na AWS. O processo envolve três aspectos principais: estabelecer a conexão local com o Redshift Serverless, criar os buckets no S3 e definir suas respectivas políticas e configurações de segurança para permitir o acesso do Redshift aos buckets.
+    This document outlines the necessary steps to configure and run the project on AWS. The process involves three main aspects: establishing a local connection to Redshift Serverless, creating the S3 buckets, and setting their respective policies and security configurations to allow Redshift access to those buckets.
 
-A adoção desses passos se deve à escolha de desenvolver os códigos utilizando PySpark. Inicialmente, utilizei a conexão direta com o Redshift por meio do driver JDBC fornecido pela AWS. Embora essa abordagem permitisse utilizar exclusivamente o Redshift, sem a necessidade de outros serviços da AWS, ela apresenta uma limitação importante, o Redshift Serverless é tarifado por consulta e tempo de execução, e o uso do JDBC faz com que o PySpark envie os dados linha por linha. Essa prática, além de extremamente ineficiente do ponto de vista de desempenho, resulta em um custo significativamente mais elevado devido ao tempo de execução para salvar os dados.
+    These steps were adopted due to the decision to develop the code using PySpark. Initially, I used a direct connection to Redshift via the JDBC driver provided by AWS. While this approach allowed exclusive use of Redshift without requiring other AWS services, it has a significant limitation. Redshift Serverless is billed based on query and runtime, and using JDBC causes PySpark to send data row by row. This practice, in addition to being extremely inefficient in terms of performance, results in significantly higher costs due to the extended runtime required to save the data.
 
-Diante disso, optei por uma abordagem mais eficiente: salvar os dados no S3 em formato Parquet, um formato muito leve e otimizado que o PySpark consegue utilizar seu processamento distribuído para o formato e, em seguida, utilizar o comando COPY para transferi-los para o Redshift. Essa estratégia é vantajosa por dois motivos principais, o Redshift é nativamente estruturado para realizar o COPY com processamento paralelo, o que garante um desempenho muito superior, e por ser mais rápido, diminui significativamente o tempo que o RedShift fica em execução, contribuindo diretamente para a redução de custos.
+    Because of this, I chose a more efficient approach: saving the data in S3 in Parquet format—a lightweight and optimized format that allows PySpark to use distributed processing. Then, using the `COPY` command, the data is transferred to Redshift. This strategy offers two key advantages: Redshift is natively structured to perform the `COPY` using parallel processing, which ensures much better performance, and because it is faster, it significantly reduces Redshift's active time, directly contributing to cost savings.
 
-Portanto, os passos descritos a seguir foram definidos com o objetivo de garantir maior eficiência, desempenho e economia na execução do projeto.
+    Therefore, the steps described below are intended to ensure greater efficiency, performance, and cost-effectiveness when running the project.
 
----
+    ---
 
-## ✅ Passo a Passo de Configuração
+    ## ✅ Setup Step-by-Step
 
-### 1. Criar o Workgroup e Namespace no Redshift Serverless
+    ### 1. Create the Workgroup and Namespace in Redshift Serverless
 
-- Acesse o console do Amazon Redshift → Redshift Serverless.
-- Crie um novo **Workgroup** e um **Namespace**.
-- Associe uma **função IAM** com permissões para acessar o S3 (detalhado no passo 4).
-- Acesse o Redshift → Workgroup → Editar configurações.
-- Ative a opção Publicamente acessível.
+    - Go to the Amazon Redshift console → Redshift Serverless.
+    - Create a new **Workgroup** and a **Namespace**.
+    - Attach an **IAM Role** with permissions to access S3 (detailed in step 4).
+    - Go to Redshift → Workgroup → Edit settings.
+    - Enable the **Publicly accessible** option.
 
-### 2. Criar o Bucket no Amazon S3
+    ### 2. Create the Bucket in Amazon S3
 
-- Acesse o console do Amazon S3 e crie um bucket (ex: `final-data-game`).
-- No bucket crie duas pastas (ex: `login-agg-date` e `first-time-login`).
+    - Access the Amazon S3 console and create a bucket (e.g., `final-data-game`).
+    - Inside the bucket, create two folders (e.g., `login-agg-date` and `first-time-login`).
 
-### 3. Configurar o Grupo de Segurança (Security Group)
+    ### 3. Configure the Security Group
 
-- Vá até o **EC2 → Security Groups**.
-- Localize o grupo de segurança associado ao seu Workgroup Redshift.
-- Adicione uma **regra de entrada**:
-    - Tipo: PostgreSQL
-    - Protocolo: TCP
-    - Porta: 5439
-    - Origem: My IP
+    - Go to **EC2 → Security Groups**.
+    - Locate the security group associated with your Redshift Workgroup.
+    - Add an **inbound rule**:
+        - Type: PostgreSQL
+        - Protocol: TCP
+        - Port: 5439
+        - Source: My IP
 
-### 4. Criar e Configurar a Função IAM
+    ### 4. Create and Configure the IAM Role
 
-- Acesse o **IAM → Roles → Create Role**.
-- Tipo de entidade confiável: **AWS Service**  
-- Serviço: **Redshift**  
-- Tipo: **Redshift - Customizable**
-- Adicione a política `AmazonS3ReadOnlyAccess`
-- Finalize a criação da role e copie o ARN.
-- Salve o ARN pois irá ser utilizado quando for realizar o setup do ambiente local
+    - Go to **IAM → Roles → Create Role**.
+    - Trusted entity type: **AWS Service**  
+    - Service: **Redshift**  
+    - Use case: **Redshift - Customizable**
+    - Attach the policy `AmazonS3ReadOnlyAccess`
+    - Finish creating the role and copy the ARN.
+    - Save the ARN, as it will be used when setting up the local environment.
 
-### 5. Configurar Permissões no Bucket S3
-- Acesse o bucket no S3 → Aba Permissões → Política do bucket.
-- Adicione a política abaixo (substitua os valores adequadamente):
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
+    ### 5. Configure Permissions in the S3 Bucket
+    - Go to the S3 bucket → Permissions tab → Bucket Policy.
+    - Add the following policy (replace values as appropriate):
+    ```json
     {
-      "Sid": "AllowRedshiftServerlessReadAccess",
-      "Effect": "Allow",
-      "Principal": {
-        "Service": "redshift.amazonaws.com"
-      },
-      "Action": [
-        "s3:GetObject",
-        "s3:ListBucket",
-        "s3:PutObject",
-        "s3:PutObjectAcl"
-      ],
-      "Resource": [
-        "arn:aws:s3:::final-data-game",
-        "arn:aws:s3:::final-data-game/*"
-      ],
-      "Condition": {
-        "StringEquals": {
-          "aws:SourceAccount": "YOUR_ACCOUNT_ID"
-        },
-        "ArnLike": {
-          "aws:SourceArn": "YOUR_REDSHIFT_WORKGROUP_ARN"
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "AllowRedshiftServerlessReadAccess",
+          "Effect": "Allow",
+          "Principal": {
+            "Service": "redshift.amazonaws.com"
+          },
+          "Action": [
+            "s3:GetObject",
+            "s3:ListBucket",
+            "s3:PutObject",
+            "s3:PutObjectAcl"
+          ],
+          "Resource": [
+            "arn:aws:s3:::final-data-game",
+            "arn:aws:s3:::final-data-game/*"
+          ],
+          "Condition": {
+            "StringEquals": {
+              "aws:SourceAccount": "YOUR_ACCOUNT_ID"
+            },
+            "ArnLike": {
+              "aws:SourceArn": "YOUR_REDSHIFT_WORKGROUP_ARN"
+            }
+          }
         }
-      }
+      ]
     }
-  ]
-}
 
     """)
 
     st.markdown("---")
-    st.subheader("🧩 Pronto para configurar o ambiente local?")
-    if st.button("🖥️ Ir para Ambiente Local"):
-        change_page("🖥️ Ambiente Local")
+    st.subheader("🧩 Ready to set up the local environment?")
+    if st.button("🖥️ Go to Local Environment"):
+        change_page("🖥️ Local Environment")
         st.rerun()
 
 
+
 # Página: Ambiente Local
-elif st.session_state.page == "🖥️ Ambiente Local":
-    st.title("🖥️ Setup: Ambiente Local")
+elif st.session_state.page == "🖥️ Local Environment":
+    st.title("🖥️ Setup: Local Environment")
 
     st.markdown("""
-    ### 📄 1. Clonar o Repositório
+    ### 📄 1. Clone the Repository
     ```git
     git clone https://github.com/IgorCanelo/ETL.git
     ```      
-    ### 🔐 2. Configuração do `.env`
-    Crie um arquivo chamado de .env na raiz do projeto e preencha com as credenciais necessárias para testes locais.
-                
+
+    ### 🔐 2. `.env` Configuration
+    Create a file named `.env` at the root of the project and fill it with the necessary credentials for local testing.
+
     ```dotenv
     AWS_ACCESS_KEY_ID=your_access_key_aws
     AWS_SECRET_ACCESS_KEY=your_secret_key_aws
@@ -250,112 +252,112 @@ elif st.session_state.page == "🖥️ Ambiente Local":
     PASSWORD_REDSHIFT=your_password
     SLACK_WEBHOOK_URL=your_webhook_slack
     ```
-                
-    ### 🔐 3. Configuração dos arquivos localizados em `sql-scripts/copy_table`
-    - Para os dois arquivos:
-        - `COPY` - Se os buckets e pastas foram criados com os nomes sugeridos não é necessário atualizar
-        - `FROM` - Cole o seu ARN obtido do RedShift
-                
 
-    ### 🐳 4. Build do Docker
+    ### 🔐 3. Configure the Files in `sql-scripts/copy_table`
+    - For both files:
+        - `COPY` - If the buckets and folders were created with the suggested names, no update is needed.
+        - `FROM` - Paste your ARN obtained from Redshift.
+                
+    ### 🐳 4. Build the Docker Image
     ```bash
     docker build -f Dockerfile.airflow -t data_pipeline_project .
     ```
 
-    ### 🔄 5. Subir os containers com Docker Compose
+    ### 🔄 5. Start the Containers with Docker Compose
     ```bash
     docker-compose up
     ```
 
-    ### 🌐 6. Acessar o Airflow
-    - Acesse em: [http://localhost:8080](http://localhost:8080)
+    ### 🌐 6. Access Airflow
+    - Open in your browser: [http://localhost:8080](http://localhost:8080)
                 
-    ### 🧪 7. (Opcional) Conectar via DBeaver
+    ### 🧪 7. (Optional) Connect via DBeaver
 
-    Para facilitar a visualização e execução de queries no banco, recomenda-se usar o **DBeaver**:
+    To make it easier to visualize and run queries on the database, it is recommended to use **DBeaver**:
 
-    1. Faça o download e instale o DBeaver: [https://dbeaver.io/download/](https://dbeaver.io/download/)
-    2. Crie duas conexões:
-        - Uma para o **PostgreSQL local**:
+    1. Download and install DBeaver: [https://dbeaver.io/download/](https://dbeaver.io/download/)
+    2. Create two connections:
+        - One for **local PostgreSQL**:
             - Host: `localhost`
-            - Porta: `5433`
+            - Port: `5433`
             - Database: `game_data`
-            - Usuário: `game`
-            - Senha: `game123`
-        - Outra para o **Redshift Serverless**:
-            - Host: `HOST_REDSHIFT` (do `.env`)
-            - Porta: `5439`
-            - Database: conforme configurado no Redshift
-            - Usuário/Senha: conforme definido no `.env`
+            - User: `game`
+            - Password: `game123`
+        - One for **Redshift Serverless**:
+            - Host: `HOST_REDSHIFT` (from `.env`)
+            - Port: `5439`
+            - Database: as configured in Redshift
+            - User/Password: as defined in `.env`
 
-    💡 *Essa etapa é opcional, mas útil para debug e análise dos dados carregados.*
-
+    💡 *This step is optional, but useful for debugging and analyzing loaded data.*
     """)
-    
+
     st.markdown("---")
-    if st.button("🏗️ Ver Arquitetura sugerida para uma empresa de jogos mobile"):
-        change_page("🏗️ Arquitetura de Dados")
+    if st.button("🏗️ View Suggested Architecture for a Mobile Game Company"):
+        change_page("🏗️ Data Architecture")
         st.rerun()
+
 
 # Página: Detalhes do Projeto
 
     
 
 # Página: Arquitetura de Dados
-elif st.session_state.page == "🏗️ Arquitetura de Dados":
-    st.title("🏗️ Arquitetura sugerida de Dados")
+elif st.session_state.page == "🏗️ Data Architecture":
+    st.title("🏗️ Suggested Data Architecture")
 
     st.markdown("""
-    ### Arquitetura de Dados
+    ### Data Architecture
 
-    A arquitetura foi desenhada para ser **escalável**, **modular** e de **fácil manutenção**.
-
-    ---
-
-    #### ✅ Prós
-
-    - **Separação clara por camadas (Raw, Bronze, Silver, Gold):**  
-      Facilita o tratamento e a evolução da qualidade dos dados em cada etapa, promovendo um pipeline mais confiável e organizado.
-
-    - **Uso do Airflow para orquestração:**  
-      Ferramenta robusta e amplamente adotada para agendamento e monitoramento de workflows. Permite automações complexas com boa visibilidade. É open-source e possui uma grande comunidade.
-
-    - **Ingestão de dados com Airbyte:**  
-      Oferece conectores prontos para diversas fontes, acelerando a ingestão com baixo esforço de configuração. Também é open-source, permitindo customizações.
-
-    - **Armazenamento escalável no Data Lake (S3):**  
-      O Amazon S3 proporciona escalabilidade, durabilidade e flexibilidade para dados em diferentes formatos e volumes.
-
-    - **Redshift como Data Warehouse:**  
-      Eficiente para análises em larga escala, com boa integração ao ecossistema AWS.
-
-    - **Visualização com Power BI:**  
-      Entrega insights de forma amigável ao usuário final, com integração fluida com o Redshift e outras fontes.
-
-    - **Observabilidade com CloudWatch e Slack:**  
-      Permite monitoramento centralizado e alertas automáticos, agilizando a detecção e resolução de falhas.
+    The architecture was designed to be **scalable**, **modular**, and **easy to maintain**.
 
     ---
 
-    #### ⚠️ Contras
+    #### ✅ Pros
 
-    - **Gerenciamento de ferramentas auto-hospedadas (Airflow e Airbyte):**  
-      Exigem operação e manutenção constantes, o que pode aumentar a complexidade operacional em cenários mais exigentes.
+    - **Clear separation by layers (Raw, Bronze, Silver, Gold):**  
+      Facilitates data processing and quality improvement at each stage, promoting a more reliable and organized pipeline.
 
-    - **Custo e uso eficiente de recursos:**  
-      O uso de serviços como EC2 e Redshift pode gerar custos elevados se não houver governança. É necessário gerenciar o tempo de execução das instâncias para evitar gastos desnecessários.
+    - **Use of Airflow for orchestration:**  
+      A robust and widely adopted tool for scheduling and monitoring workflows. Supports complex automation with good visibility. It's open-source and has a large community.
 
-    - **Curva de aprendizado:**  
-      As ferramentas escolhidas são poderosas, mas possuem curva de aprendizado significativa, podendo demandar mais tempo na implementação e onboarding da equipe.
+    - **Data ingestion with Airbyte:**  
+      Provides ready-made connectors for various sources, accelerating ingestion with minimal configuration effort. Also open-source and customizable.
 
-    - **Monitoramento e logging distribuído:**  
-      Logs e métricas espalhados entre diferentes ferramentas (Airflow, Airbyte, CloudWatch) podem dificultar a centralização e o troubleshooting em pipelines complexos.
+    - **Scalable storage in the Data Lake (S3):**  
+      Amazon S3 offers scalability, durability, and flexibility for handling data in various formats and volumes.
+
+    - **Redshift as a Data Warehouse:**  
+      Efficient for large-scale analytics, with strong integration within the AWS ecosystem.
+
+    - **Visualization with Power BI:**  
+      Delivers insights in a user-friendly way, with smooth integration with Redshift and other sources.
+
+    - **Observability with CloudWatch and Slack:**  
+      Enables centralized monitoring and automatic alerts, speeding up failure detection and resolution.
+
+    ---
+
+    #### ⚠️ Cons
+
+    - **Management of self-hosted tools (Airflow and Airbyte):**  
+      Requires continuous operation and maintenance, which can increase operational complexity in more demanding scenarios.
+
+    - **Cost and efficient resource usage:**  
+      Services like EC2 and Redshift can become expensive without proper governance. Instance run times must be managed to avoid unnecessary expenses.
+
+    - **Learning curve:**  
+      The chosen tools are powerful but have a significant learning curve, potentially requiring more time for implementation and team onboarding.
+
+    - **Distributed monitoring and logging:**  
+      Logs and metrics scattered across different tools (Airflow, Airbyte, CloudWatch) can make centralization and troubleshooting more challenging in complex pipelines.
     """)
 
+
     # Comentei a linha abaixo pois a imagem pode não existir
-    st.image("images/arquitetura.png", caption="Diagrama da Arquitetura", use_container_width=True)
+    st.image("images/arquitetura.png", caption="Architecture diagram", use_container_width=True)
     
     st.markdown("---")
-    if st.button("📌 Voltar para Overview"):
+    if st.button("📌 Back to Overview"):
         change_page("📌 Overview")
         st.rerun()
