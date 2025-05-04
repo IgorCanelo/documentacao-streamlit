@@ -1,0 +1,11 @@
+"user_id","total_logins","first_login","operational_system","continent","country"
+"1",12,2017-09-12 00:00:00.000,other,EU,DEU
+"2",11,2017-09-12 00:00:01.000,ios,AS,CHN
+"3",12,2017-09-12 00:00:03.000,other,NA,CAN
+"4",8,2017-09-12 00:00:05.000,ios,NA,CAN
+"5",13,2017-09-12 00:00:07.000,android,NA,USA
+"6",12,2017-09-12 00:00:09.000,ios,SA,CHL
+"7",14,2017-09-12 00:00:11.000,other,EU,DEU
+"8",9,2017-09-12 00:00:13.000,ios,unknown,unknown
+"9",7,2017-09-12 00:00:15.000,ios,NA,CAN
+"10",13,2017-09-12 00:00:16.000,android,SA,BRA
